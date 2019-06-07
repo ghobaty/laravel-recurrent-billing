@@ -1,0 +1,87 @@
+@extends('billing.layout')
+
+@section('billing-section')
+
+    <div class="flex flex-wrap justify-center">
+        @foreach($plans as $plan)
+            <div class="p-3 w-full sm:w-1/2 md:w-1/3">
+                <div class="bg-grey-800 text-white rounded-lg p-4 mb-3">
+                    <div class="uppercase text-grey-500 text-center text-sm tracking-wider">{{ $plan->description }}</div>
+                    <div class="text-center">
+                        <span class="text-5xl">{{ $currency['symbol'] }}{{ number_format($plan->price / 100) }}</span><span class="text-sm">/month</span>
+                    </div>
+                    <hr>
+                    <ul class="mt-8">
+                        @foreach($plan->quota?? [] as $key => $limit)
+                            <li>
+                                <strong class="font-bold">
+                                    @if($limit === PHP_INT_MAX)
+                                        Unlimited
+                                    @else
+                                        {{ number_format($limit) }}
+                                    @endif
+                                </strong> {{ Illuminate\Support\Str::title($key) }}
+                            </li>
+                        @endforeach
+                    </ul>
+                    <div class="text-center mt-8">
+                        @if($current->is($plan))
+                            <div class="text-green-400 font-bold text-lg my-3">
+                                Current Plan
+                            </div>
+                        @else
+                            @if($current->isFree())
+                                <button class="bg-blue-400 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full checkout-button" onclick="upgrade({{ $plan->toJson() }})" type="button">
+                                    Upgrade
+                                </button>
+                            @endif
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <ul class="text-grey-500 list-disc list-inside px-3">
+        <li class="font-bold">All prices are US Dollars.</li>
+        <li>When you upgrade, you card will <strong>automatically be charged monthly</strong>.</li>
+        <li>You can cancel your subscription at any time.</li>
+        <li>If you cancel your subscription, you will still enjoy your plan's benefits until the end of your billing cycle.</li>
+    </ul>
+
+    <form method="post" action="{{ route('billing.subscription') }}" id="payment-form" style="display: none">
+        {{ csrf_field() }}
+        <input id="payment-plan" type="hidden" name="plan" value="">
+        <input id="payment-token" type="hidden" name="token" value="">
+    </form>
+
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+
+    <script>
+        function upgrade(plan) {
+            handler.open({
+                name: '{{ config('app.name') }}',
+                description: plan.description,
+                currency: '{{ config('billing.currency.code') }}',
+                amount: plan.price,
+                panelLabel: 'Subscribe for @{{amount}}',
+                email: '{{ \Auth::user()->email }}',
+            });
+            document.getElementById('payment-plan').value = plan.name;
+        }
+
+        var handler = StripeCheckout.configure({
+            key: '{{ config('services.stripe.key') }}',
+            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            locale: 'auto',
+            token: function(token) {
+                document.getElementById('payment-token').value = token.id;
+                document.getElementById('payment-form').submit();
+            },
+        });
+
+        window.addEventListener('popstate', function() {
+            handler.close();
+        });
+    </script>
+@endsection

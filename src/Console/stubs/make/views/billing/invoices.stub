@@ -1,0 +1,22 @@
+@extends('billing.layout')
+
+@section('billing-section')
+    <table class="border-collapse w-full md:w-8/12">
+        <thead>
+        <tr class="bg-grey-600 text-white text-left">
+            <th class="p-3">Date</th>
+            <th class="p-3">Total</th>
+            <th class="p-3">Download</th>
+        </tr>
+        </thead>
+        @foreach ($invoices as $invoice)
+            <tr class="hover:bg-grey-100 text-left">
+                <td class="p-3">{{ $invoice->date()->toFormattedDateString() }}</td>
+                <td class="p-3">{{ $invoice->total() }}</td>
+                <td class="p-3">
+                    <a href="{{ route('billing.invoices.show', $invoice->id) }}" class="text-blue-500 hover:text-blue-700">Download</a>
+                </td>
+            </tr>
+        @endforeach
+    </table>
+@endsection

@@ -1,0 +1,50 @@
+{
+  "name": "ghobaty/laravel-recurrent-billing",
+  "description": "Out-of-the-box recurrent billing for your Laravel apps",
+  "keywords": [
+    "laravel",
+    "billing",
+    "cashier",
+    "ghobaty"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohamed Elghobaty",
+      "email": "hello@ghobaty.com",
+      "homepage": "https://ghobaty.com"
+    }
+  ],
+  "require": {
+    "laravel/cashier": "^9.3"
+  },
+  "require-dev": {
+    "larapack/dd": "^1.0",
+    "orchestra/testbench": "^3.8",
+    "phpunit/phpunit": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ghobaty\\Billing\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ghobaty\\Billing\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Ghobaty\\Billing\\BillingServiceProvider"
+      ]
+    }
+  }
+}

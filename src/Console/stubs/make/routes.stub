@@ -1,0 +1,14 @@
+
+// Billing Routes
+Route::get('/billing/subscription', '\Ghobaty\Billing\Http\Controllers\BillingController@index')->name('billing.subscription');
+Route::get('/billing/subscribe', '\Ghobaty\Billing\Http\Controllers\BillingController@showSubscribeForm')->name('billing.subscribe');
+Route::post('/billing/subscription', '\Ghobaty\Billing\Http\Controllers\BillingController@subscribe');
+Route::put('/billing/subscription/plan', '\Ghobaty\Billing\Http\Controllers\BillingController@changePlan')->name('billing.subscription.plan');
+Route::delete('/billing/subscription', '\Ghobaty\Billing\Http\Controllers\BillingController@destroy');
+Route::put('/billing/subscription/card', '\Ghobaty\Billing\Http\Controllers\BillingController@updateCard')->name('billing.subscription.card');
+Route::post('/billing/subscription/restore', '\Ghobaty\Billing\Http\Controllers\BillingController@restore')->name('billing.subscription.restore');
+Route::get('/billing/invoices', '\Ghobaty\Billing\Http\Controllers\BillingController@invoices')->name('billing.invoices');
+Route::get('/billing/invoices/{invoice}', '\Ghobaty\Billing\Http\Controllers\BillingController@invoice')->name('billing.invoices.show');
+
+// Webhook Routes
+Route::post('webhook/stripe', '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook');
