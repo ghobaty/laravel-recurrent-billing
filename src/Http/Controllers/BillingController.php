@@ -43,8 +43,8 @@ class BillingController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      * @throws \Throwable
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function subscribe(Request $request)
     {
@@ -100,9 +100,9 @@ class BillingController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Exception
      * @throws \Throwable
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy()
     {
@@ -126,8 +126,8 @@ class BillingController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function restore()
     {
@@ -154,8 +154,8 @@ class BillingController extends Controller
      *
      * @param Request $request
      * @param \App\Http\Controllers\
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function updateCard(Request $request)
     {
@@ -188,9 +188,9 @@ class BillingController extends Controller
      */
     public function invoices()
     {
-        return view('billing.invoices', [
-            'invoices' => $this->billable()->invoices(),
-        ]);
+        $invoices = $this->billable()->stripe_id ? $this->billable()->invoices() : [];
+
+        return view('billing.invoices', compact('invoices'));
     }
 
     /**
